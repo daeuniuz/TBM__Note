@@ -53,432 +53,462 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- 회사 코드 입력 모달 -->
-    <div id="company-code-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
-            <h2 class="text-xl font-bold mb-4">TBM Note 시작하기</h2>
-            <p class="text-gray-600 mb-6">데이터를 안전하게 관리하기 위해<br>회사 코드를 입력해주세요.</p>
-            <input type="text" id="company-code-input" placeholder="회사 코드를 입력하세요" class="form-input mb-4 text-center">
-            <button id="company-code-submit" class="btn-primary">시작하기</button>
+    <div id="app-wrapper">
+        <!-- 회사 코드 입력 모달 -->
+        <div id="company-code-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
+                <h2 class="text-xl font-bold mb-4">TBM Note 시작하기</h2>
+                <p class="text-gray-600 mb-6">데이터를 안전하게 관리하기 위해<br>회사 코드를 입력해주세요.</p>
+                <input type="text" id="company-code-input" placeholder="회사 코드를 입력하세요" class="form-input mb-4 text-center">
+                <button id="company-code-submit" class="btn-primary">시작하기</button>
+            </div>
         </div>
-    </div>
 
-    <!-- 메인 앱 컨테이너 -->
-    <div id="app-container" class="hidden h-screen flex flex-col">
-        <!-- 헤더 -->
-        <header class="bg-white shadow-md w-full p-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600">TBM Note</h1>
-            <div>
-                <span id="display-company-code" class="text-sm text-gray-600 font-semibold mr-2"></span>
-                <button id="change-company-btn" class="text-xs text-blue-500 hover:underline">변경</button>
-            </div>
-        </header>
-
-        <!-- 탭 네비게이션 -->
-        <nav class="bg-white shadow-sm">
-            <div class="flex justify-around border-b border-gray-200">
-                <button data-tab="tbm" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition active">TBM 기록</button>
-                <button data-tab="community" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">커뮤니티</button>
-                <button data-tab="vote" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">투표</button>
-                <button data-tab="meeting" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">미팅</button>
-            </div>
-        </nav>
-
-        <!-- 탭 컨텐츠 -->
-        <main id="tab-content" class="flex-grow p-4 overflow-y-auto no-scrollbar pb-24">
-            <!-- TBM 기록 탭 -->
-            <div id="tbm-content" class="tab-pane active">
-                <div class="flex space-x-2 mb-4">
-                    <button id="show-tbm-form-btn" class="flex-1 btn-primary">새 기록 작성</button>
-                    <button id="show-tbm-list-btn" class="flex-1 btn-tertiary">기록 목록 보기</button>
+        <!-- 메인 앱 컨테이너 -->
+        <div id="app-container" class="hidden h-screen flex flex-col">
+            <!-- 헤더 -->
+            <header class="bg-white shadow-md w-full p-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-blue-600">TBM Note</h1>
+                <div>
+                    <span id="display-company-code" class="text-sm text-gray-600 font-semibold mr-2"></span>
+                    <button id="change-company-btn" class="text-xs text-blue-500 hover:underline">변경</button>
                 </div>
+            </header>
 
-                <div id="tbm-form-view">
-                     <h3 class="text-xl font-bold mb-4 text-center">Tool Box Meeting 회의록</h3>
-                     <form id="tbm-form" class="space-y-4">
-                        <table class="w-full border-collapse border border-gray-300 tbm-table">
-                            <tbody>
-                                <tr><th>TBM 일시</th><td colspan="3"><input type="datetime-local" id="tbm-datetime" required></td></tr>
-                                <tr><th>작업명</th><td colspan="3"><input type="text" id="tbm-work-name" placeholder="작업명 입력" required></td></tr>
-                                <tr><th>작업내용</th><td colspan="3"><textarea id="tbm-work-details" placeholder="작업내용 입력" class="w-full border-none focus:ring-0 p-1" rows="2"></textarea></td></tr>
-                                <tr><th>TBM 장소</th><td colspan="3"><input type="text" id="tbm-location" placeholder="장소 입력" required></td></tr>
-                                <tr>
-                                    <th rowspan="4">잠재위험요인</th>
-                                    <td class="font-semibold bg-gray-100">위험성평가 실시여부</td>
-                                    <td colspan="2"><label class="mr-2"><input type="radio" name="risk-assessment" value="yes"> 예</label><label><input type="radio" name="risk-assessment" value="no" checked> 아니오</label></td>
-                                </tr>
-                                <tr><td class="font-semibold bg-gray-100">잠재위험요인</td><td class="font-semibold bg-gray-100" colspan="2">대책</td></tr>
-                                <tr class="risk-item"><td><input type="text" placeholder="위험요인 1"></td><td colspan="2"><input type="text" placeholder="대책 1"></td></tr>
-                                <tr class="risk-item"><td><input type="text" placeholder="위험요인 2"></td><td colspan="2"><input type="text" placeholder="대책 2"></td></tr>
-                                <tr><th>중점위험요인</th><td colspan="3"><select id="tbm-key-risk" class="form-select"><option value="">선택하세요</option></select></td></tr>
-                                <tr>
-                                    <th>TBM 리더 확인</th>
-                                    <td colspan="3"><div class="grid grid-cols-3 gap-2 text-center"><input type="text" id="tbm-leader-dept" placeholder="소속"><input type="text" id="tbm-leader-position" placeholder="직책"><input type="text" id="tbm-leader-name" placeholder="성명(서명)"></div></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="mt-4">
-                            <h4 class="font-bold mb-2">■ 참석자 확인</h4>
+            <!-- 탭 네비게이션 -->
+            <nav class="bg-white shadow-sm">
+                <div class="flex justify-around border-b border-gray-200">
+                    <button data-tab="tbm" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition active">TBM 기록</button>
+                    <button data-tab="community" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">커뮤니티</button>
+                    <button data-tab="vote" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">투표</button>
+                    <button data-tab="meeting" class="tab-button flex-1 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent transition">미팅</button>
+                </div>
+            </nav>
+
+            <!-- 탭 컨텐츠 -->
+            <main id="tab-content" class="flex-grow p-4 overflow-y-auto no-scrollbar pb-24">
+                <!-- TBM 기록 탭 -->
+                <div id="tbm-content" class="tab-pane active">
+                    <div class="flex space-x-2 mb-4">
+                        <button id="show-tbm-form-btn" class="flex-1 btn-primary">새 기록 작성</button>
+                        <button id="show-tbm-list-btn" class="flex-1 btn-tertiary">기록 목록 보기</button>
+                    </div>
+
+                    <div id="tbm-form-view">
+                         <h3 class="text-xl font-bold mb-4 text-center">Tool Box Meeting 회의록</h3>
+                         <form id="tbm-form" class="space-y-4">
                             <table class="w-full border-collapse border border-gray-300 tbm-table">
-                                <thead><tr><th>이름</th><th>서명</th><th>이름</th><th>서명</th></tr></thead>
-                                <tbody id="attendees-tbody">
-                                    <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                                    <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                                <tbody>
+                                    <tr><th>TBM 일시</th><td colspan="3"><input type="datetime-local" id="tbm-datetime" required></td></tr>
+                                    <tr><th>작업명</th><td colspan="3"><input type="text" id="tbm-work-name" placeholder="작업명 입력" required></td></tr>
+                                    <tr><th>작업내용</th><td colspan="3"><textarea id="tbm-work-details" placeholder="작업내용 입력" class="w-full border-none focus:ring-0 p-1" rows="2"></textarea></td></tr>
+                                    <tr><th>TBM 장소</th><td colspan="3"><input type="text" id="tbm-location" placeholder="장소 입력" required></td></tr>
+                                    <tr>
+                                        <th rowspan="4">잠재위험요인</th>
+                                        <td class="font-semibold bg-gray-100">위험성평가 실시여부</td>
+                                        <td colspan="2"><label class="mr-2"><input type="radio" name="risk-assessment" value="yes"> 예</label><label><input type="radio" name="risk-assessment" value="no" checked> 아니오</label></td>
+                                    </tr>
+                                    <tr><td class="font-semibold bg-gray-100">잠재위험요인</td><td class="font-semibold bg-gray-100" colspan="2">대책</td></tr>
+                                    <tr class="risk-item"><td><input type="text" placeholder="위험요인 1"></td><td colspan="2"><input type="text" placeholder="대책 1"></td></tr>
+                                    <tr class="risk-item"><td><input type="text" placeholder="위험요인 2"></td><td colspan="2"><input type="text" placeholder="대책 2"></td></tr>
+                                    <tr><th>중점위험요인</th><td colspan="3"><select id="tbm-key-risk" class="form-select"><option value="">선택하세요</option></select></td></tr>
+                                    <tr>
+                                        <th>TBM 리더 확인</th>
+                                        <td colspan="3"><div class="grid grid-cols-3 gap-2 text-center"><input type="text" id="tbm-leader-dept" placeholder="소속"><input type="text" id="tbm-leader-position" placeholder="직책"><input type="text" id="tbm-leader-name" placeholder="성명(서명)"></div></td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <button type="button" id="add-attendee-btn" class="mt-2 text-sm text-blue-600 hover:underline">+ 참석자 추가</button>
-                        </div>
-                        <div>
-                            <label class="form-label" for="tbm-photo-upload">사진 첨부 (선택, 5MB 이하 권장)</label>
-                            <input type="file" id="tbm-photo-upload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        </div>
-                        <button type="submit" class="btn-primary">저장하기</button>
-                     </form>
+                            <div class="mt-4">
+                                <h4 class="font-bold mb-2">■ 참석자 확인</h4>
+                                <table class="w-full border-collapse border border-gray-300 tbm-table">
+                                    <thead><tr><th>이름</th><th>서명</th><th>이름</th><th>서명</th></tr></thead>
+                                    <tbody id="attendees-tbody">
+                                        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                                        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" id="add-attendee-btn" class="mt-2 text-sm text-blue-600 hover:underline">+ 참석자 추가</button>
+                            </div>
+                            <div>
+                                <label class="form-label" for="tbm-photo-upload">사진 첨부 (선택, 5MB 이하 권장)</label>
+                                <input type="file" id="tbm-photo-upload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
+                            <button type="submit" class="btn-primary">저장하기</button>
+                         </form>
+                    </div>
+                    <div id="tbm-list-view" class="hidden"><h3 class="text-xl font-bold mb-4">TBM 기록 목록</h3><div id="tbm-list" class="space-y-2"></div></div>
+                    <div id="tbm-detail-view" class="hidden"><button id="back-to-list-btn" class="btn-tertiary mb-4 w-auto">← 목록으로 돌아가기</button><div id="tbm-detail-content"></div></div>
                 </div>
-                <div id="tbm-list-view" class="hidden"><h3 class="text-xl font-bold mb-4">TBM 기록 목록</h3><div id="tbm-list" class="space-y-2"></div></div>
-                <div id="tbm-detail-view" class="hidden"><button id="back-to-list-btn" class="btn-tertiary mb-4 w-auto">← 목록으로 돌아가기</button><div id="tbm-detail-content"></div></div>
-            </div>
-            <!-- 커뮤니티 탭 -->
-            <div id="community-content" class="tab-pane hidden">
-                <div class="mb-6 card"><h3 class="text-lg font-bold mb-4">익명 글쓰기</h3><form id="community-form" class="space-y-4"><input type="text" id="community-nickname" placeholder="닉네임" class="form-input" required><textarea id="community-content-input" placeholder="내용을 자유롭게 작성해주세요." class="form-textarea" rows="4" required></textarea><button type="submit" class="btn-primary">게시하기</button></form></div>
-                <div id="community-list"></div>
-            </div>
-            <!-- 투표 탭 -->
-            <div id="vote-content" class="tab-pane hidden">
-                 <div class="mb-6"><h3 class="text-lg font-bold mb-4">새 투표 만들기</h3><form id="vote-form" class="space-y-4"><input type="text" id="vote-topic" placeholder="투표 주제" class="form-input" required><input type="text" id="vote-option1" placeholder="선택 1" class="form-input" required><input type="text" id="vote-option2" placeholder="선택 2" class="form-input" required><button type="submit" class="btn-primary">투표 생성</button></form></div>
-                <div id="vote-list"></div>
-            </div>
-            <!-- 미팅 탭 -->
-            <div id="meeting-content" class="tab-pane hidden">
-                <div class="mb-6"><h3 class="text-lg font-bold mb-4">새 미팅 추가</h3><form id="meeting-form" class="space-y-4"><input type="text" id="meeting-name" placeholder="회의명" class="form-input" required><input type="datetime-local" id="meeting-date" class="form-input" required><input type="url" id="meeting-link" placeholder="Zoom 링크" class="form-input" required><button type="submit" class="btn-primary">미팅 추가</button></form></div>
-                <div id="meeting-list"></div>
-            </div>
-        </main>
+                <!-- 커뮤니티 탭 -->
+                <div id="community-content" class="tab-pane hidden">
+                    <div class="mb-6 card"><h3 class="text-lg font-bold mb-4">익명 글쓰기</h3><form id="community-form" class="space-y-4"><input type="text" id="community-nickname" placeholder="닉네임" class="form-input" required><textarea id="community-content-input" placeholder="내용을 자유롭게 작성해주세요." class="form-textarea" rows="4" required></textarea><button type="submit" class="btn-primary">게시하기</button></form></div>
+                    <div id="community-list"></div>
+                </div>
+                <!-- 투표 탭 -->
+                <div id="vote-content" class="tab-pane hidden">
+                     <div class="mb-6"><h3 class="text-lg font-bold mb-4">새 투표 만들기</h3><form id="vote-form" class="space-y-4"><input type="text" id="vote-topic" placeholder="투표 주제" class="form-input" required><input type="text" id="vote-option1" placeholder="선택 1" class="form-input" required><input type="text" id="vote-option2" placeholder="선택 2" class="form-input" required><button type="submit" class="btn-primary">투표 생성</button></form></div>
+                    <div id="vote-list"></div>
+                </div>
+                <!-- 미팅 탭 -->
+                <div id="meeting-content" class="tab-pane hidden">
+                    <div class="mb-6"><h3 class="text-lg font-bold mb-4">새 미팅 추가</h3><form id="meeting-form" class="space-y-4"><input type="text" id="meeting-name" placeholder="회의명" class="form-input" required><input type="datetime-local" id="meeting-date" class="form-input" required><input type="url" id="meeting-link" placeholder="Zoom 링크" class="form-input" required><button type="submit" class="btn-primary">미팅 추가</button></form></div>
+                    <div id="meeting-list"></div>
+                </div>
+            </main>
+        </div>
+        
+        <!-- 로딩 스피너 -->
+        <div id="loading-spinner" class="fixed inset-0 z-50 bg-white/70 flex items-center justify-center hidden"><svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>
     </div>
-    
-    <!-- 로딩 스피너 -->
-    <div id="loading-spinner" class="fixed inset-0 z-50 bg-white/70 flex items-center justify-center hidden"><svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- 전역 변수 ---
-            let userId, companyCode;
-            
-            // --- DOM 요소 ---
-            const companyCodeModal = document.getElementById('company-code-modal');
-            const appContainer = document.getElementById('app-container');
-            const displayCompanyCode = document.getElementById('display-company-code');
-            const changeCompanyBtn = document.getElementById('change-company-btn');
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabPanes = document.querySelectorAll('.tab-pane');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const tbmFormView = document.getElementById('tbm-form-view');
-            const tbmListView = document.getElementById('tbm-list-view');
-            const tbmDetailView = document.getElementById('tbm-detail-view');
-            const showTbmFormBtn = document.getElementById('show-tbm-form-btn');
-            const showTbmListBtn = document.getElementById('show-tbm-list-btn');
-            const backToListBtn = document.getElementById('back-to-list-btn');
-
-            // --- LocalStorage 데이터 관리 ---
-            const getDb = () => {
-                const db = localStorage.getItem(`tbmNote_${companyCode}`);
-                return db ? JSON.parse(db) : { tbm_records: [], community_posts: [], votes: [], meetings: [] };
-            };
-            const saveDb = (db) => {
-                localStorage.setItem(`tbmNote_${companyCode}`, JSON.stringify(db));
-            };
-
-            // --- 앱 초기화 ---
-            function initializeApp() {
-                // 사용자 ID 확인 또는 생성
-                let localUserId = localStorage.getItem('tbmNote_userId');
-                if (!localUserId) {
-                    localUserId = crypto.randomUUID();
-                    localStorage.setItem('tbmNote_userId', localUserId);
-                }
-                userId = localUserId;
-
-                // 회사 코드 확인
-                const savedCode = localStorage.getItem('tbmNote_companyCode');
-                if (savedCode) {
-                    companyCode = savedCode;
-                    startApp();
-                } else {
-                    companyCodeModal.classList.remove('hidden');
-                    companyCodeModal.classList.add('flex');
-                }
+        // --- 브라우저 호환성 검사 ---
+        function isLocalStorageAvailable() {
+            try {
+                const test = '__storage_test__';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                return true;
+            } catch (e) {
+                return false;
             }
+        }
 
-            // --- 회사 코드 및 앱 시작 ---
-            function startApp() {
-                companyCodeModal.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                displayCompanyCode.textContent = `회사 코드: ${companyCode}`;
-                loadAllData();
-            }
-
-            function loadAllData() {
-                loadTbmRecords();
-                loadCommunityPosts();
-                loadVotes();
-                loadMeetings();
-            }
-
-            document.getElementById('company-code-submit').addEventListener('click', () => {
-                const code = document.getElementById('company-code-input').value.trim();
-                if (code) {
-                    localStorage.setItem('tbmNote_companyCode', code);
-                    companyCode = code;
-                    startApp();
-                } else {
-                    alert('회사 코드를 입력해주세요.');
-                }
-            });
-
-            changeCompanyBtn.addEventListener('click', () => {
-                localStorage.removeItem('tbmNote_companyCode');
-                appContainer.classList.add('hidden');
-                companyCodeModal.classList.remove('hidden');
-                companyCodeModal.classList.add('flex');
-            });
-
-            // --- UI 이벤트 리스너 ---
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetTab = button.dataset.tab;
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    tabPanes.forEach(pane => pane.classList.toggle('hidden', pane.id !== `${targetTab}-content`));
-                });
-            });
-
-            function switchTbmView(viewToShow) {
-                tbmFormView.classList.toggle('hidden', viewToShow !== 'form');
-                tbmListView.classList.toggle('hidden', viewToShow !== 'list');
-                tbmDetailView.classList.toggle('hidden', viewToShow !== 'detail');
-                showTbmFormBtn.classList.toggle('btn-primary', viewToShow === 'form');
-                showTbmFormBtn.classList.toggle('btn-tertiary', viewToShow !== 'form');
-                showTbmListBtn.classList.toggle('btn-primary', ['list', 'detail'].includes(viewToShow));
-                showTbmListBtn.classList.toggle('btn-tertiary', !['list', 'detail'].includes(viewToShow));
-            }
-            showTbmFormBtn.addEventListener('click', () => { document.getElementById('tbm-form').reset(); switchTbmView('form'); });
-            showTbmListBtn.addEventListener('click', () => switchTbmView('list'));
-            backToListBtn.addEventListener('click', () => switchTbmView('list'));
-            
-            // --- 유틸리티 함수 ---
-            const formatDate = (isoString) => new Date(isoString).toLocaleString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            const formatMeetingDate = (isoString) => new Date(isoString).toLocaleString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            const getBase64 = (file) => new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-
-
-            // --- TBM 기록 로직 ---
-            const tbmForm = document.getElementById('tbm-form');
-            document.getElementById('add-attendee-btn').addEventListener('click', () => document.getElementById('attendees-tbody').insertAdjacentHTML('beforeend', `<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>`));
-            tbmForm.querySelectorAll('.risk-item input[placeholder^="위험요인"]').forEach(input => input.addEventListener('input', updateKeyRiskOptions));
-            
-            function updateKeyRiskOptions() {
-                const keyRiskSelect = document.getElementById('tbm-key-risk');
-                keyRiskSelect.innerHTML = '<option value="">선택하세요</option>';
-                tbmForm.querySelectorAll('.risk-item input[placeholder^="위험요인"]').forEach((riskInput, index) => {
-                    if (riskInput.value.trim()) keyRiskSelect.add(new Option(`위험요인 ${index + 1}: ${riskInput.value}`, riskInput.value));
-                });
-            }
-
-            tbmForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                loadingSpinner.classList.remove('hidden');
+        if (!isLocalStorageAvailable()) {
+            document.getElementById('app-wrapper').innerHTML = `
+                <div class="p-4 m-4 text-center text-red-700 bg-red-100 rounded-lg">
+                    <h2 class="font-bold text-lg mb-2">오류: 앱을 실행할 수 없습니다.</h2>
+                    <p>사용 중인 브라우저에서 데이터 저장 기능(LocalStorage)을 사용할 수 없습니다. 브라우저의 시크릿 모드 또는 개인정보 보호 설정이 원인일 수 있습니다. 일반 모드에서 다시 시도해주세요.</p>
+                </div>`;
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                // --- 전역 변수 ---
+                let userId, companyCode;
                 
-                let photoBase64 = '';
-                const photoInput = document.getElementById('tbm-photo-upload');
-                if (photoInput.files.length > 0) {
+                // --- DOM 요소 ---
+                const companyCodeModal = document.getElementById('company-code-modal');
+                const appContainer = document.getElementById('app-container');
+                const displayCompanyCode = document.getElementById('display-company-code');
+                const changeCompanyBtn = document.getElementById('change-company-btn');
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const tabPanes = document.querySelectorAll('.tab-pane');
+                const loadingSpinner = document.getElementById('loading-spinner');
+                const tbmFormView = document.getElementById('tbm-form-view');
+                const tbmListView = document.getElementById('tbm-list-view');
+                const tbmDetailView = document.getElementById('tbm-detail-view');
+                const showTbmFormBtn = document.getElementById('show-tbm-form-btn');
+                const showTbmListBtn = document.getElementById('show-tbm-list-btn');
+                const backToListBtn = document.getElementById('back-to-list-btn');
+
+                // --- LocalStorage 데이터 관리 (안정성 강화) ---
+                const getDb = () => {
                     try {
-                        photoBase64 = await getBase64(photoInput.files[0]);
-                    } catch (error) {
-                         console.error("사진 처리 실패:", error);
-                         alert("사진 처리에 실패했습니다.");
-                         loadingSpinner.classList.add('hidden');
-                         return;
+                        const db = localStorage.getItem(`tbmNote_${companyCode}`);
+                        return db ? JSON.parse(db) : { tbm_records: [], community_posts: [], votes: [], meetings: [] };
+                    } catch (e) {
+                        console.error("데이터를 불러오는 중 오류 발생:", e);
+                        alert("데이터를 불러오는 데 실패했습니다. 앱을 새로고침하거나 브라우저 캐시를 삭제해보세요.");
+                        return { tbm_records: [], community_posts: [], votes: [], meetings: [] };
+                    }
+                };
+                const saveDb = (db) => {
+                     try {
+                        localStorage.setItem(`tbmNote_${companyCode}`, JSON.stringify(db));
+                    } catch (e) {
+                        console.error("데이터를 저장하는 중 오류 발생:", e);
+                        alert("데이터 저장에 실패했습니다. 브라우저 저장 공간이 가득 찼을 수 있습니다.");
+                    }
+                };
+
+                // --- 앱 초기화 ---
+                function initializeApp() {
+                    let localUserId = localStorage.getItem('tbmNote_userId');
+                    if (!localUserId) {
+                        localUserId = crypto.randomUUID();
+                        localStorage.setItem('tbmNote_userId', localUserId);
+                    }
+                    userId = localUserId;
+
+                    const savedCode = localStorage.getItem('tbmNote_companyCode');
+                    if (savedCode) {
+                        companyCode = savedCode;
+                        startApp();
+                    } else {
+                        companyCodeModal.classList.remove('hidden');
+                        companyCodeModal.classList.add('flex');
                     }
                 }
-                const risks = Array.from(document.querySelectorAll('.risk-item')).map(item => ({ risk: item.querySelector('input:first-child').value, measure: item.querySelector('input:last-child').value })).filter(r => r.risk || r.measure);
-                const attendees = [];
-                document.getElementById('attendees-tbody').querySelectorAll('tr').forEach(row => {
-                    const inputs = row.querySelectorAll('input');
-                    if(inputs[0].value || inputs[1].value) attendees.push({name: inputs[0].value, sign: inputs[1].value});
-                    if(inputs[2].value || inputs[3].value) attendees.push({name: inputs[2].value, sign: inputs[3].value});
-                });
-                
-                const record = { 
-                    id: crypto.randomUUID(), createdAt: new Date().toISOString(), 
-                    datetime: document.getElementById('tbm-datetime').value, workName: document.getElementById('tbm-work-name').value, 
-                    workDetails: document.getElementById('tbm-work-details').value, location: document.getElementById('tbm-location').value, 
-                    riskAssessment: document.querySelector('input[name="risk-assessment"]:checked').value, risks, keyRisk: document.getElementById('tbm-key-risk').value, 
-                    leader: { dept: document.getElementById('tbm-leader-dept').value, position: document.getElementById('tbm-leader-position').value, name: document.getElementById('tbm-leader-name').value }, 
-                    attendees, photoLink: photoBase64
-                };
-                
-                const db = getDb();
-                db.tbm_records.push(record);
-                saveDb(db);
-                
-                tbmForm.reset();
-                alert('TBM 회의록이 저장되었습니다.');
-                loadingSpinner.classList.add('hidden');
-                loadTbmRecords();
-                switchTbmView('list');
-            });
 
-            function loadTbmRecords() {
-                const db = getDb();
-                const list = document.getElementById('tbm-list');
-                list.innerHTML = '';
-                const records = db.tbm_records.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-                
-                if (records.length === 0) {
-                    list.innerHTML = '<p class="text-gray-500 text-center py-4">아직 TBM 기록이 없습니다.</p>';
-                    return;
+                // --- 회사 코드 및 앱 시작 ---
+                function startApp() {
+                    companyCodeModal.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    displayCompanyCode.textContent = `회사 코드: ${companyCode}`;
+                    loadAllData();
                 }
-                records.forEach(record => {
-                    const recordBtn = document.createElement('button');
-                    recordBtn.className = "w-full text-left p-3 bg-white rounded-md shadow hover:bg-gray-50 transition";
-                    recordBtn.innerHTML = `<span class="font-semibold text-blue-600">${record.workName}</span><span class="block text-sm text-gray-500">${formatMeetingDate(record.datetime)}</span>`;
-                    recordBtn.onclick = () => showTbmDetail(record.id);
-                    list.appendChild(recordBtn);
-                });
-            }
-            
-            function showTbmDetail(recordId) {
-                const db = getDb();
-                const record = db.tbm_records.find(r => r.id === recordId);
-                if (!record) return;
-                const risksHtml = record.risks.map(r => `<tr><td>${r.risk || ''}</td><td colspan="2">${r.measure || ''}</td></tr>`).join('');
-                const attendeesHtml = record.attendees.map(a => `<tr><td>${a.name}</td><td>${a.sign}</td></tr>`).join('');
-                document.getElementById('tbm-detail-content').innerHTML = `<h3 class="text-xl font-bold mb-4 text-center">Tool Box Meeting 회의록</h3><table class="w-full border-collapse border border-gray-300 tbm-table"><tbody><tr><th>TBM 일시</th><td colspan="3">${formatMeetingDate(record.datetime)}</td></tr><tr><th>작업명</th><td colspan="3">${record.workName}</td></tr><tr><th>작업내용</th><td colspan="3">${record.workDetails.replace(/\n/g, '<br>')}</td></tr><tr><th>TBM 장소</th><td colspan="3">${record.location}</td></tr><tr><th rowspan="${2 + record.risks.length}">잠재위험요인</th><td class="font-semibold bg-gray-100">위험성평가</td><td colspan="2">${record.riskAssessment === 'yes' ? '예' : '아니오'}</td></tr><tr><td class="font-semibold bg-gray-100">잠재위험요인</td><td class="font-semibold bg-gray-100" colspan="2">대책</td></tr>${risksHtml}<tr><th>중점위험요인</th><td colspan="3">${record.keyRisk}</td></tr><tr><th>TBM 리더 확인</th><td colspan="3"><div class="grid grid-cols-3 gap-2 text-center"><span>소속: ${record.leader.dept}</span><span>직책: ${record.leader.position}</span><span>성명: ${record.leader.name}</span></div></td></tr></tbody></table><div class="mt-4"><h4 class="font-bold mb-2">■ 참석자 확인</h4><table class="w-full border-collapse border border-gray-300 tbm-table"><thead><tr><th>이름</th><th>서명</th></tr></thead><tbody>${attendeesHtml}</tbody></table></div>${record.photoLink ? `<div class="mt-4"><h4 class="font-bold mb-2">■ 첨부 사진</h4><img src="${record.photoLink}" alt="TBM Photo" class="max-w-full h-auto rounded-md border"></div>` : ''}`;
-                switchTbmView('detail');
-            }
 
-            // --- 커뮤니티 로직 ---
-            document.getElementById('community-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const post = { id: crypto.randomUUID(), nickname: document.getElementById('community-nickname').value, content: document.getElementById('community-content-input').value, createdAt: new Date().toISOString(), comments: [] };
-                const db = getDb();
-                db.community_posts.push(post);
-                saveDb(db);
-                e.target.reset();
-                loadCommunityPosts();
-            });
-
-            function addComment(postId, nickname, text) {
-                const db = getDb();
-                const post = db.community_posts.find(p => p.id === postId);
-                if (post) {
-                    post.comments.push({ id: crypto.randomUUID(), nickname: nickname || "익명", text, createdAt: new Date().toISOString() });
-                    saveDb(db);
-                    loadCommunityPosts(); // UI re-render
+                function loadAllData() {
+                    loadTbmRecords();
+                    loadCommunityPosts();
+                    loadVotes();
+                    loadMeetings();
                 }
-            }
 
-            function loadCommunityPosts() {
-                const db = getDb();
-                const list = document.getElementById('community-list');
-                list.innerHTML = '';
-                db.community_posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(post => {
-                    const commentsHtml = post.comments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).map(comment => `
-                        <div class="text-sm bg-gray-100 p-2 rounded-md">
-                            <p><strong class="font-semibold">${comment.nickname}:</strong> ${comment.text}</p>
-                            <p class="text-xs text-gray-400 text-right">${formatDate(comment.createdAt)}</p>
-                        </div>`).join('');
-
-                    const cardContainer = document.createElement('div');
-                    cardContainer.innerHTML = `<div class="card post-it"><div class="flex justify-between items-start mb-2"><p class="font-bold text-lg">${post.nickname}</p><p class="text-xs text-gray-500">${formatDate(post.createdAt)}</p></div><p class="mb-2 whitespace-pre-wrap">${post.content}</p><div class="comment-section"><div class="space-y-2 mb-2">${commentsHtml}</div><form class="comment-form space-y-2" data-post-id="${post.id}"><div class="flex space-x-2"><input type="text" placeholder="닉네임" class="form-input text-sm w-1/3"><input type="text" placeholder="댓글 달기..." class="form-input text-sm flex-grow" required></div><button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm w-full">게시</button></form></div></div>`;
-                    list.appendChild(cardContainer);
+                document.getElementById('company-code-submit').addEventListener('click', () => {
+                    const code = document.getElementById('company-code-input').value.trim();
+                    if (code) {
+                        localStorage.setItem('tbmNote_companyCode', code);
+                        companyCode = code;
+                        startApp();
+                    } else {
+                        alert('회사 코드를 입력해주세요.');
+                    }
                 });
 
-                document.querySelectorAll('.comment-form').forEach(form => {
-                     if (form.dataset.listenerAttached) return;
-                     form.dataset.listenerAttached = true;
-                     form.addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        const postId = e.target.dataset.postId;
-                        const nickInput = e.target.querySelector('input[placeholder="닉네임"]');
-                        const textInput = e.target.querySelector('input[placeholder="댓글 달기..."]');
-                        if (textInput.value.trim()) {
-                            addComment(postId, nickInput.value.trim(), textInput.value.trim());
-                            nickInput.value = '';
-                            textInput.value = '';
-                        }
+                changeCompanyBtn.addEventListener('click', () => {
+                    localStorage.removeItem('tbmNote_companyCode');
+                    appContainer.classList.add('hidden');
+                    companyCodeModal.classList.remove('hidden');
+                    companyCodeModal.classList.add('flex');
+                });
+
+                // --- UI 이벤트 리스너 ---
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetTab = button.dataset.tab;
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        tabPanes.forEach(pane => pane.classList.toggle('hidden', pane.id !== `${targetTab}-content`));
                     });
                 });
-            }
-            
-            // --- 투표 로직 ---
-            document.getElementById('vote-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const vote = { id: crypto.randomUUID(), topic: document.getElementById('vote-topic').value, option1: { text: document.getElementById('vote-option1').value, count: 0 }, option2: { text: document.getElementById('vote-option2').value, count: 0 }, voters: [], createdAt: new Date().toISOString() };
-                const db = getDb();
-                db.votes.push(vote);
-                saveDb(db);
-                e.target.reset();
-                loadVotes();
-            });
 
-            window.castVote = (voteId, optionKey) => {
-                const db = getDb();
-                const vote = db.votes.find(v => v.id === voteId);
-                if (vote && !vote.voters.includes(userId)) {
-                    vote[optionKey].count++;
-                    vote.voters.push(userId);
-                    saveDb(db);
-                    loadVotes();
+                function switchTbmView(viewToShow) {
+                    tbmFormView.classList.toggle('hidden', viewToShow !== 'form');
+                    tbmListView.classList.toggle('hidden', viewToShow !== 'list');
+                    tbmDetailView.classList.toggle('hidden', viewToShow !== 'detail');
+                    showTbmFormBtn.classList.toggle('btn-primary', viewToShow === 'form');
+                    showTbmFormBtn.classList.toggle('btn-tertiary', viewToShow !== 'form');
+                    showTbmListBtn.classList.toggle('btn-primary', ['list', 'detail'].includes(viewToShow));
+                    showTbmListBtn.classList.toggle('btn-tertiary', !['list', 'detail'].includes(viewToShow));
                 }
-            };
-
-            function loadVotes() {
-                const db = getDb();
-                const list = document.getElementById('vote-list');
-                list.innerHTML = '<h3>진행중인 투표</h3>';
-                if (db.votes.length === 0) { list.innerHTML += '<p>진행중인 투표가 없습니다.</p>'; return; }
-                db.votes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(vote => {
-                    const totalVotes = vote.option1.count + vote.option2.count;
-                    const p1 = totalVotes ? (vote.option1.count / totalVotes * 100).toFixed(1) : 0;
-                    const p2 = totalVotes ? (vote.option2.count / totalVotes * 100).toFixed(1) : 0;
-                    const alreadyVoted = vote.voters.includes(userId);
-                    list.innerHTML += `<div class="card"><p class="font-bold">${vote.topic}</p><p class="text-xs">총 ${totalVotes}명 참여</p>${alreadyVoted ? `<div class="space-y-2 mt-2"><div class="w-full bg-gray-200 rounded-full h-8 relative"><div class="bg-blue-600 h-8 rounded-full text-white px-2 flex items-center" style="width:${p1}%">${vote.option1.text}</div><span class="absolute right-2 top-1/2 -translate-y-1/2">${vote.option1.count} (${p1}%)</span></div><div class="w-full bg-gray-200 rounded-full h-8 relative"><div class="bg-green-600 h-8 rounded-full text-white px-2 flex items-center" style="width:${p2}%">${vote.option2.text}</div><span class="absolute right-2 top-1/2 -translate-y-1/2">${vote.option2.count} (${p2}%)</span></div><p class="text-center text-sm">투표에 참여했습니다.</p></div>` : `<div class="flex space-x-4 mt-2"><button onclick="castVote('${vote.id}','option1')" class="flex-1 btn-secondary">${vote.option1.text}</button><button onclick="castVote('${vote.id}','option2')" class="flex-1 btn-secondary">${vote.option2.text}</button></div>`}</div>`;
+                showTbmFormBtn.addEventListener('click', () => { document.getElementById('tbm-form').reset(); switchTbmView('form'); });
+                showTbmListBtn.addEventListener('click', () => switchTbmView('list'));
+                backToListBtn.addEventListener('click', () => switchTbmView('list'));
+                
+                // --- 유틸리티 함수 ---
+                const formatDate = (isoString) => new Date(isoString).toLocaleString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const formatMeetingDate = (isoString) => new Date(isoString).toLocaleString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const getBase64 = (file) => new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
                 });
-            }
 
-            // --- 미팅 로직 ---
-            document.getElementById('meeting-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const meeting = { id: crypto.randomUUID(), name: document.getElementById('meeting-name').value, date: document.getElementById('meeting-date').value, zoomLink: document.getElementById('meeting-link').value };
-                const db = getDb();
-                db.meetings.push(meeting);
-                saveDb(db);
-                e.target.reset();
-                loadMeetings();
+
+                // --- TBM 기록 로직 ---
+                const tbmForm = document.getElementById('tbm-form');
+                document.getElementById('add-attendee-btn').addEventListener('click', () => document.getElementById('attendees-tbody').insertAdjacentHTML('beforeend', `<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>`));
+                tbmForm.querySelectorAll('.risk-item input[placeholder^="위험요인"]').forEach(input => input.addEventListener('input', updateKeyRiskOptions));
+                
+                function updateKeyRiskOptions() {
+                    const keyRiskSelect = document.getElementById('tbm-key-risk');
+                    keyRiskSelect.innerHTML = '<option value="">선택하세요</option>';
+                    tbmForm.querySelectorAll('.risk-item input[placeholder^="위험요인"]').forEach((riskInput, index) => {
+                        if (riskInput.value.trim()) keyRiskSelect.add(new Option(`위험요인 ${index + 1}: ${riskInput.value}`, riskInput.value));
+                    });
+                }
+
+                tbmForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    loadingSpinner.classList.remove('hidden');
+                    
+                    let photoBase64 = '';
+                    const photoInput = document.getElementById('tbm-photo-upload');
+                    if (photoInput.files.length > 0) {
+                        try {
+                            photoBase64 = await getBase64(photoInput.files[0]);
+                        } catch (error) {
+                             console.error("사진 처리 실패:", error);
+                             alert("사진 처리에 실패했습니다.");
+                             loadingSpinner.classList.add('hidden');
+                             return;
+                        }
+                    }
+                    const risks = Array.from(document.querySelectorAll('.risk-item')).map(item => ({ risk: item.querySelector('input:first-child').value, measure: item.querySelector('input:last-child').value })).filter(r => r.risk || r.measure);
+                    const attendees = [];
+                    document.getElementById('attendees-tbody').querySelectorAll('tr').forEach(row => {
+                        const inputs = row.querySelectorAll('input');
+                        if(inputs[0].value || inputs[1].value) attendees.push({name: inputs[0].value, sign: inputs[1].value});
+                        if(inputs[2].value || inputs[3].value) attendees.push({name: inputs[2].value, sign: inputs[3].value});
+                    });
+                    
+                    const record = { 
+                        id: crypto.randomUUID(), createdAt: new Date().toISOString(), 
+                        datetime: document.getElementById('tbm-datetime').value, workName: document.getElementById('tbm-work-name').value, 
+                        workDetails: document.getElementById('tbm-work-details').value, location: document.getElementById('tbm-location').value, 
+                        riskAssessment: document.querySelector('input[name="risk-assessment"]:checked').value, risks, keyRisk: document.getElementById('tbm-key-risk').value, 
+                        leader: { dept: document.getElementById('tbm-leader-dept').value, position: document.getElementById('tbm-leader-position').value, name: document.getElementById('tbm-leader-name').value }, 
+                        attendees, photoLink: photoBase64
+                    };
+                    
+                    const db = getDb();
+                    db.tbm_records.push(record);
+                    saveDb(db);
+                    
+                    tbmForm.reset();
+                    alert('TBM 회의록이 저장되었습니다.');
+                    loadingSpinner.classList.add('hidden');
+                    loadTbmRecords();
+                    switchTbmView('list');
+                });
+
+                function loadTbmRecords() {
+                    const db = getDb();
+                    const list = document.getElementById('tbm-list');
+                    list.innerHTML = '';
+                    const records = db.tbm_records.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+                    
+                    if (records.length === 0) {
+                        list.innerHTML = '<p class="text-gray-500 text-center py-4">아직 TBM 기록이 없습니다.</p>';
+                        return;
+                    }
+                    records.forEach(record => {
+                        const recordBtn = document.createElement('button');
+                        recordBtn.className = "w-full text-left p-3 bg-white rounded-md shadow hover:bg-gray-50 transition";
+                        recordBtn.innerHTML = `<span class="font-semibold text-blue-600">${record.workName}</span><span class="block text-sm text-gray-500">${formatMeetingDate(record.datetime)}</span>`;
+                        recordBtn.onclick = () => showTbmDetail(record.id);
+                        list.appendChild(recordBtn);
+                    });
+                }
+                
+                function showTbmDetail(recordId) {
+                    const db = getDb();
+                    const record = db.tbm_records.find(r => r.id === recordId);
+                    if (!record) return;
+                    const risksHtml = record.risks.map(r => `<tr><td>${r.risk || ''}</td><td colspan="2">${r.measure || ''}</td></tr>`).join('');
+                    const attendeesHtml = record.attendees.map(a => `<tr><td>${a.name}</td><td>${a.sign}</td></tr>`).join('');
+                    document.getElementById('tbm-detail-content').innerHTML = `<h3 class="text-xl font-bold mb-4 text-center">Tool Box Meeting 회의록</h3><table class="w-full border-collapse border border-gray-300 tbm-table"><tbody><tr><th>TBM 일시</th><td colspan="3">${formatMeetingDate(record.datetime)}</td></tr><tr><th>작업명</th><td colspan="3">${record.workName}</td></tr><tr><th>작업내용</th><td colspan="3">${record.workDetails.replace(/\n/g, '<br>')}</td></tr><tr><th>TBM 장소</th><td colspan="3">${record.location}</td></tr><tr><th rowspan="${2 + record.risks.length}">잠재위험요인</th><td class="font-semibold bg-gray-100">위험성평가</td><td colspan="2">${record.riskAssessment === 'yes' ? '예' : '아니오'}</td></tr><tr><td class="font-semibold bg-gray-100">잠재위험요인</td><td class="font-semibold bg-gray-100" colspan="2">대책</td></tr>${risksHtml}<tr><th>중점위험요인</th><td colspan="3">${record.keyRisk}</td></tr><tr><th>TBM 리더 확인</th><td colspan="3"><div class="grid grid-cols-3 gap-2 text-center"><span>소속: ${record.leader.dept}</span><span>직책: ${record.leader.position}</span><span>성명: ${record.leader.name}</span></div></td></tr></tbody></table><div class="mt-4"><h4 class="font-bold mb-2">■ 참석자 확인</h4><table class="w-full border-collapse border border-gray-300 tbm-table"><thead><tr><th>이름</th><th>서명</th></tr></thead><tbody>${attendeesHtml}</tbody></table></div>${record.photoLink ? `<div class="mt-4"><h4 class="font-bold mb-2">■ 첨부 사진</h4><img src="${record.photoLink}" alt="TBM Photo" class="max-w-full h-auto rounded-md border"></div>` : ''}`;
+                    switchTbmView('detail');
+                }
+
+                // --- 커뮤니티 로직 ---
+                document.getElementById('community-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const post = { id: crypto.randomUUID(), nickname: document.getElementById('community-nickname').value, content: document.getElementById('community-content-input').value, createdAt: new Date().toISOString(), comments: [] };
+                    const db = getDb();
+                    db.community_posts.push(post);
+                    saveDb(db);
+                    e.target.reset();
+                    loadCommunityPosts();
+                });
+
+                function addComment(postId, nickname, text) {
+                    const db = getDb();
+                    const post = db.community_posts.find(p => p.id === postId);
+                    if (post) {
+                        post.comments.push({ id: crypto.randomUUID(), nickname: nickname || "익명", text, createdAt: new Date().toISOString() });
+                        saveDb(db);
+                        loadCommunityPosts();
+                    }
+                }
+
+                function loadCommunityPosts() {
+                    const db = getDb();
+                    const list = document.getElementById('community-list');
+                    list.innerHTML = '';
+                    db.community_posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(post => {
+                        const commentsHtml = post.comments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).map(comment => `
+                            <div class="text-sm bg-gray-100 p-2 rounded-md">
+                                <p><strong class="font-semibold">${comment.nickname}:</strong> ${comment.text}</p>
+                                <p class="text-xs text-gray-400 text-right">${formatDate(comment.createdAt)}</p>
+                            </div>`).join('');
+
+                        const cardContainer = document.createElement('div');
+                        cardContainer.innerHTML = `<div class="card post-it"><div class="flex justify-between items-start mb-2"><p class="font-bold text-lg">${post.nickname}</p><p class="text-xs text-gray-500">${formatDate(post.createdAt)}</p></div><p class="mb-2 whitespace-pre-wrap">${post.content}</p><div class="comment-section"><div class="space-y-2 mb-2">${commentsHtml}</div><form class="comment-form" data-post-id="${post.id}"><div class="flex space-x-2"><input type="text" placeholder="닉네임" class="form-input text-sm w-1/3"><input type="text" placeholder="댓글 달기..." class="form-input text-sm flex-grow" required></div><button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm w-full mt-2">게시</button></form></div></div>`;
+                        list.appendChild(cardContainer);
+                    });
+
+                    document.querySelectorAll('.comment-form').forEach(form => {
+                         if (form.dataset.listenerAttached) return;
+                         form.dataset.listenerAttached = true;
+                         form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            const postId = e.target.dataset.postId;
+                            const nickInput = e.target.querySelector('input[placeholder="닉네임"]');
+                            const textInput = e.target.querySelector('input[placeholder="댓글 달기..."]');
+                            if (textInput.value.trim()) {
+                                addComment(postId, nickInput.value.trim(), textInput.value.trim());
+                            }
+                        });
+                    });
+                }
+                
+                // --- 투표 로직 ---
+                document.getElementById('vote-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const vote = { id: crypto.randomUUID(), topic: document.getElementById('vote-topic').value, option1: { text: document.getElementById('vote-option1').value, count: 0 }, option2: { text: document.getElementById('vote-option2').value, count: 0 }, voters: [], createdAt: new Date().toISOString() };
+                    const db = getDb();
+                    db.votes.push(vote);
+                    saveDb(db);
+                    e.target.reset();
+                    loadVotes();
+                });
+
+                window.castVote = (voteId, optionKey) => {
+                    const db = getDb();
+                    const vote = db.votes.find(v => v.id === voteId);
+                    if (vote && !vote.voters.includes(userId)) {
+                        vote[optionKey].count++;
+                        vote.voters.push(userId);
+                        saveDb(db);
+                        loadVotes();
+                    }
+                };
+
+                function loadVotes() {
+                    const db = getDb();
+                    const list = document.getElementById('vote-list');
+                    list.innerHTML = '<h3>진행중인 투표</h3>';
+                    if (db.votes.length === 0) { list.innerHTML += '<p>진행중인 투표가 없습니다.</p>'; return; }
+                    db.votes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(vote => {
+                        const totalVotes = vote.option1.count + vote.option2.count;
+                        const p1 = totalVotes ? (vote.option1.count / totalVotes * 100).toFixed(1) : 0;
+                        const p2 = totalVotes ? (vote.option2.count / totalVotes * 100).toFixed(1) : 0;
+                        const alreadyVoted = vote.voters.includes(userId);
+                        list.innerHTML += `<div class="card"><p class="font-bold">${vote.topic}</p><p class="text-xs">총 ${totalVotes}명 참여</p>${alreadyVoted ? `<div class="space-y-2 mt-2"><div class="w-full bg-gray-200 rounded-full h-8 relative"><div class="bg-blue-600 h-8 rounded-full text-white px-2 flex items-center" style="width:${p1}%">${vote.option1.text}</div><span class="absolute right-2 top-1/2 -translate-y-1/2">${vote.option1.count} (${p1}%)</span></div><div class="w-full bg-gray-200 rounded-full h-8 relative"><div class="bg-green-600 h-8 rounded-full text-white px-2 flex items-center" style="width:${p2}%">${vote.option2.text}</div><span class="absolute right-2 top-1/2 -translate-y-1/2">${vote.option2.count} (${p2}%)</span></div><p class="text-center text-sm">투표에 참여했습니다.</p></div>` : `<div class="flex space-x-4 mt-2"><button onclick="castVote('${vote.id}','option1')" class="flex-1 btn-secondary">${vote.option1.text}</button><button onclick="castVote('${vote.id}','option2')" class="flex-1 btn-secondary">${vote.option2.text}</button></div>`}</div>`;
+                    });
+                }
+
+                // --- 미팅 로직 ---
+                document.getElementById('meeting-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const meeting = { id: crypto.randomUUID(), name: document.getElementById('meeting-name').value, date: document.getElementById('meeting-date').value, zoomLink: document.getElementById('meeting-link').value };
+                    const db = getDb();
+                    db.meetings.push(meeting);
+                    saveDb(db);
+                    e.target.reset();
+                    loadMeetings();
+                });
+
+                function loadMeetings() {
+                    const db = getDb();
+                    const list = document.getElementById('meeting-list');
+                    list.innerHTML = '<h3>예정된 미팅</h3>';
+                    if (db.meetings.length === 0) { list.innerHTML += '<p>예정된 미팅이 없습니다.</p>'; return; }
+                    db.meetings.sort((a, b) => new Date(a.date) - new Date(b.date)).forEach(meeting => {
+                        list.innerHTML += `<div class="card"><p class="font-bold">${meeting.name}</p><p>${formatMeetingDate(meeting.date)}</p><a href="${meeting.zoomLink}" target="_blank" class="text-blue-600 hover:underline">Zoom 링크</a></div>`;
+                    });
+                }
+
+                // --- 앱 시작점 ---
+                initializeApp();
             });
-
-            function loadMeetings() {
-                const db = getDb();
-                const list = document.getElementById('meeting-list');
-                list.innerHTML = '<h3>예정된 미팅</h3>';
-                if (db.meetings.length === 0) { list.innerHTML += '<p>예정된 미팅이 없습니다.</p>'; return; }
-                db.meetings.sort((a, b) => new Date(a.date) - new Date(b.date)).forEach(meeting => {
-                    list.innerHTML += `<div class="card"><p class="font-bold">${meeting.name}</p><p>${formatMeetingDate(meeting.date)}</p><a href="${meeting.zoomLink}" target="_blank" class="text-blue-600 hover:underline">Zoom 링크</a></div>`;
-                });
-            }
-
-            // --- 앱 시작점 ---
-            initializeApp();
-        });
+        }
     </script>
 </body>
 </html>
+
+
 
 
 
